@@ -28,7 +28,7 @@ data_2008 = LOAD '2008.csv' USING PigStorage(',') AS (
                                             NASDelay:chararray,
                                             SecurityDelay:chararray,
                                             LateAircraftDelay:chararray);
-total_delay_2008 = FOREACH data_2008 GENERATE ArrDelay+DepDelay as TotalDelay:int;
-grouped_total_delay = GROUP total_delay_2008 ALL;
-limited_data = FOREACH grouped_total_delay GENERATE MAX(total_delay_2008.TotalDelay);
+total_delay_2008 = FOREACH data_2008 GENERATE Month, ArrDelay+DepDelay as TotalDelay:int;
+grouped_total_delay = GROUP total_delay_2008 BY Month;
+limited_data = FOREACH grouped_total_delay GENERATE group, MAX(total_delay_2008.TotalDelay);
 DUMP limited_data;
